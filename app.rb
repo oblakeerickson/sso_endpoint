@@ -2,7 +2,6 @@ require 'roda'
 require 'base64'
 require 'openssl'
 require 'uri'
-require 'cgi'
 require 'securerandom'
 
 class App < Roda
@@ -17,9 +16,7 @@ class App < Roda
       else
         base64_sso = URI.unescape(sso)
         decoded_sso = Base64.decode64(base64_sso)
-        #uri = URI.parse(decoded_sso)
-        #CGI::parse(decoded_sso)
-        params = Rack::Utils.parse_nested_query(decoded_sso) #=> {"a" => "2"}
+        params = Rack::Utils.parse_nested_query(decoded_sso)
         nonce = params['nonce']
         return_sso_url = params['return_sso_url']
         external_id = rand 1000
