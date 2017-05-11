@@ -33,8 +33,9 @@ class App < Roda
         base64_payload = Base64.encode64(payload)
         encoded_payload = URI.escape(base64_payload)
         new_sig = OpenSSL::HMAC.hexdigest("sha256", 'abcdefghij', base64_payload)
-        r.redirect "http://192.168.56.2:3000/session/sso_login?sso=#{encoded_payload}&sig=#{new_sig}"
+        r.redirect "#{return_sso_url}/session/sso_login?sso=#{encoded_payload}&sig=#{new_sig}"
       end
     end
   end
+
 end
