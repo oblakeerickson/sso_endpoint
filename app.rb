@@ -25,9 +25,9 @@ class App < Roda
           "nonce" => nonce,
           "name" => username,
           "external_id" => external_id,
-          "email" => "#{username}@test.com",
+          "email" => "#{username}@example.com",
           "username" => username,
-          "require_activation" => "true"
+          "require_activation" => "false"
         }
         payload = Rack::Utils.build_query(payload)
         base64_payload = Base64.encode64(payload)
