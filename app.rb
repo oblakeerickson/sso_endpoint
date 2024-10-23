@@ -3,6 +3,7 @@ require 'base64'
 require 'openssl'
 require 'uri'
 require 'securerandom'
+require 'cgi'
 
 class App < Roda
 
@@ -14,7 +15,7 @@ class App < Roda
       if sig_test != sig
         return "error"
       else
-        base64_sso = URI.unescape(sso)
+        base64_sso = CGI.unescape(sso)
         decoded_sso = Base64.decode64(base64_sso)
         params = Rack::Utils.parse_nested_query(decoded_sso)
         nonce = params['nonce']
@@ -31,7 +32,7 @@ class App < Roda
         }
         payload = Rack::Utils.build_query(payload)
         base64_payload = Base64.encode64(payload)
-        encoded_payload = URI.escape(base64_payload)
+        encoded_payload = CGI.escape(base64_payload)
         new_sig = OpenSSL::HMAC.hexdigest("sha256", 'abcdefghij', base64_payload)
         r.redirect "#{return_sso_url}?sso=#{encoded_payload}&sig=#{new_sig}"
       end
